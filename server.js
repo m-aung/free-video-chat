@@ -25,7 +25,10 @@ io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
     // console.log('roomId:', roomId, '\n userId: ', userId);
     socket.join(roomId);
-    socket.to(roomId).emit('user-connected', userId);
+    socket.broadcast.to(roomId).emit('user-connected', userId).broadcast;
+    socket.on('discconect', () => {
+      socket.broadcast.to(roomId).emit('user-disconnected', userId).broadcast;
+    });
   });
 });
 
